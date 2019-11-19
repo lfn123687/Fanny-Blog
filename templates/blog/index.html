@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block main %}
+    {% if error_msg %}
+        <p>{{ error_msg }}</p>
+    {% endif %}
+    {% for post in post_list %}
+        <article class="post post-{{ post.pk }}">
+            <header class="entry-header">
+                <h1 class="entry-title">
+                    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                </h1>
+                <div class="entry-meta">
+                    <span class="post-category"><a href="#">{{ post.category.name }}</a></span>
+                    <span class="post-date"><a href="#"><time class="entry-date"
+                                                                datetime="2012-11-09T23:15:57+00:00">{{ post.created_time }}</time></a></span>
+                    <span class="post-author"><a href="#">{{ post.author }}</a></span>
+                    <span class="comments-link"><a href="{{ post.get_absolute_url }}#comment-area">{{ post.comment_set.count }} comments</a></span>
+                    <span class="views-count"><a href="#">{{ post.views }} reads</a></span>
+                </div>
+            </header>
+            <div class="entry-content clearfix">
+                <p>{{ post.excerpt }}</p>
+                <div class="read-more cl-effect-14">
+                    <a href="{{ post.get_absolute_url }}" class="more-link">Continue<span class="meta-nav">→</span></a>
+                </div>
+            </div>
+        </article>
+    {% empty %}
+        <div class="no-post">No post published yet!</div>
+    {% endfor %}
+
+    <div class="pagination-simple">
+    {% if is_paginated %}
+        {% if first %}
+            <a href="?page=1">1</a>
+        {% endif %}
+        {% if left_has_more %}
+        <span>...</span>
+        {% endif %}
+        {% if left %}
+            {% for l in left %}
+                <a href="?page={{ l }}">{{ l }}</a>
+            {% endfor %}
+        {% endif %}
+        <a href="?page={{ page_obj.number }}" style="color:crimson">{{ page_obj.number }}</a>
+        {% if right %}
+            {% for r in right %}
+                <a href="?page={{ r }}">{{ r }}</a>
+            {% endfor %}
+        {% endif %}
+        {% if right_has_more %}
+        <span>...</span>
+        {% endif %}
+        {% if last %}
+            <a href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+        {% endif %}
+    {% endif %}
+    </div>
+{% endblock main %}
